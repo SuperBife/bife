@@ -1,0 +1,103 @@
+mqtt:
+  host: 192.168.20.184
+  user: mqtt-user
+  password: mqtt
+
+objects:
+  track:
+    - person
+
+ffmpeg:
+  hwaccel_args: preset-vaapi
+  
+go2rtc:
+  streams:
+    frente:
+      - rtsp://admin:@Montecristo348@192.168.20.147:554/Streaming/Channels/1
+    frente_sub:
+      - rtsp://admin:@Montecristo348@192.168.20.147:554/Streaming/Channels/2
+    garage:
+      - rtsp://admin:@Montecristo348@192.168.20.143:554/Streaming/Channels/1
+    garage_sub:
+      - rtsp://admin:@Montecristo348@192.168.20.143:554/Streaming/Channels/2
+    fondo:
+      - rtsp://admin:@Montecristo348@192.168.20.142:554/Streaming/Channels/1
+    fondo_sub:
+      - rtsp://admin:@Montecristo348@192.168.20.142:554/Streaming/Channels/2
+  webrtc:
+    candidates:
+      - 192.168.20.148:8555
+
+cameras:
+  frente:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/frente?video=copy
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/frente_sub?video=copy
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+    detect:
+      width: 320
+      height: 240
+      fps: 7
+    record:
+      enabled: True
+    snapshots:
+      enabled: False
+
+  garage:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/garage?video=copy
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/garage_sub?video=copy
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+    detect:
+      width: 320
+      height: 240
+      fps: 7
+    record:
+      enabled: True
+    snapshots:
+      enabled: False
+
+  fondo:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/fondo?video=copy
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/fondo_sub?video=copy
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+    detect:
+      width: 320
+      height: 240
+      fps: 7
+    record:
+      enabled: True
+    snapshots:
+      enabled: False
+
+record:
+  enabled: True
+  retain:
+    days: 14
+    mode: motion
+  events:
+    retain:
+      default: 50
+      mode: motion
+
+ui:
+  live_mode: mse
